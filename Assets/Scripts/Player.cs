@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
-using static Unity.Burst.Intrinsics.X86.Avx;
 
 public class Player : MonoBehaviour
 {
@@ -19,7 +14,12 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
 
+    [Header("Collision")]
+    [SerializeField] private float groundCheckDistance = 0.1f;
+    [SerializeField] private LayerMask groundLayer;
+
     private bool isFacingRight = true;
+
 
     private void Awake()
     {
@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     private void Update()
     {
         //    Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        //SyncPlayerPosition();
 
         HandleUserInputs();
 
@@ -41,37 +42,43 @@ public class Player : MonoBehaviour
 
         HandleFlip();
 
-        SyncPlayerPosition();
+
     }
 
+    //private void HandleCollision()
+    //{
+    //    isGrounded = Physics2D.Raycast(body.transform.position, Vector2.down, groundCheckDistance, groundLayer);
+    //}
 
     private void HandleUserInputs()
     {
         HandleMove();
 
-        HandleJump(rb);
+        //HandleJump(rb);
 
     }
 
     private void HandleAnimation()
     {
-        bool isMoving = rb.velocity.x != 0;
+        float xVelocity  = rb.velocity.x;
+        float yVelocity = rb.velocity.y;
 
-        anim.SetBool("isMoving", isMoving);
-        // Example: animator.SetBool("isJumping", !Mathf.Approximately(rb.velocity.y, 0));
+        float velocityMagnitude = new Vector2(xVelocity, yVelocity).magnitude;
+        anim.SetFloat("velocity", velocityMagnitude);
     }
 
     private void HandleMove()
     {
         float xInput = Input.GetAxis("Horizontal");
-        rb.velocity = new Vector2(xInput * moveSpeed, rb.velocity.y);
+        float yInput = Input.GetAxis("Vertical");
+        rb.velocity = new Vector2(xInput * moveSpeed, yInput * moveSpeed);
     }
 
-    private void HandleJump(Rigidbody2D rb)
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-    }
+    //private void HandleJump(Rigidbody2D rb)
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+    //        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    //}
 
     private void HandleFlip()
     {
@@ -91,10 +98,21 @@ public class Player : MonoBehaviour
         isFacingRight = !isFacingRight;
     }
 
-    private void SyncPlayerPosition()
-    {
-        Vector3 groundPosition = ground.transform.position;
-        groundPosition.x = body.transform.position.x;
-        ground.transform.position = groundPosition;
-    }
+    //private void SyncPlayerPosition()
+    //{
+
+
+    //    //Debug.Log($"Distance to ground: {distanceToGround}");
+
+    //    Vector3 groundPosition = ground.transform.position;
+    //    groundPosition.x = body.transform.position.x;
+    //    groundPosition.y = body.transform.position.y - distanceToGround;
+    //    ground.transform.position = groundPosition;
+
+    //}
+
+    //private void OnDrawGizmos()
+    //{
+    //    Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
+    //}
 }
