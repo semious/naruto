@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        rb = body.GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         anim = body.GetComponent<Animator>();
     }
 
