@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     private bool isFacingRight = true;
+    private bool canMove = true;
+    private bool isAttacking = false;
 
 
     private void Awake()
@@ -45,6 +47,16 @@ public class Player : MonoBehaviour
 
     }
 
+    public void setMovement(bool enable)
+    {
+        this.canMove = enable;
+    }
+
+    public void setAttack(bool enable)
+    {
+        this.isAttacking = enable;
+    }
+
     //private void HandleCollision()
     //{
     //    isGrounded = Physics2D.Raycast(body.transform.position, Vector2.down, groundCheckDistance, groundLayer);
@@ -52,26 +64,41 @@ public class Player : MonoBehaviour
 
     private void HandleUserInputs()
     {
-        HandleMove();
-
+        TryToMove();
+        TryToAttack();
         //HandleJump(rb);
 
     }
 
     private void HandleAnimation()
     {
-        float xVelocity  = rb.velocity.x;
+        float xVelocity = rb.velocity.x;
         float yVelocity = rb.velocity.y;
 
         float velocityMagnitude = new Vector2(xVelocity, yVelocity).magnitude;
         anim.SetFloat("velocity", velocityMagnitude);
     }
 
-    private void HandleMove()
+    private void TryToMove()
     {
+
         float xInput = Input.GetAxis("Horizontal");
         float yInput = Input.GetAxis("Vertical");
-        rb.velocity = new Vector2(xInput * moveSpeed, yInput * moveSpeed);
+
+        if (canMove)
+            rb.velocity = new Vector2(xInput * moveSpeed, yInput * moveSpeed);
+        else
+            rb.velocity = Vector2.zero;
+
+
+    }
+
+    private void TryToAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !isAttacking)
+        {
+            anim.SetTrigger("attack");
+        }
     }
 
     //private void HandleJump(Rigidbody2D rb)
@@ -79,6 +106,8 @@ public class Player : MonoBehaviour
     //    if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
     //        rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
     //}
+
+
 
     private void HandleFlip()
     {
