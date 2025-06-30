@@ -11,15 +11,21 @@ public class PlayerAnimationEvents : MonoBehaviour
         player = GetComponentInParent<Player>();
     }
 
-    private void enableAttack()
+    private void StartAttack()
     {
         player.setMovement(false);
         player.setAttack(true);
     }
 
-    private void disableAttack()
+    private void FinishAttack()
     {
         player.setMovement(true);
         player.setAttack(false);
     }
+
+    private void Damage() { 
+        player.DamanageEnemies();
+    }
+
+    
 }

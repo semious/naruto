@@ -10,9 +10,15 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject body;
     [SerializeField] private GameObject ground;
 
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpForce;
+
+    [Header("Attack Info")]
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private float attackRange = 0.5f;
+    [SerializeField] private LayerMask whatIsEnemy;
 
     [Header("Collision")]
     [SerializeField] private float groundCheckDistance = 0.1f;
@@ -57,6 +63,16 @@ public class Player : MonoBehaviour
         this.isAttacking = enable;
     }
 
+    public void DamanageEnemies()
+    {
+        Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, whatIsEnemy);
+
+        foreach (Collider2D enemy in enemyColliders)
+        {
+            enemy.GetComponent<Enemy>().TakeDamage();
+        }
+    }
+
     //private void HandleCollision()
     //{
     //    isGrounded = Physics2D.Raycast(body.transform.position, Vector2.down, groundCheckDistance, groundLayer);
@@ -89,7 +105,6 @@ public class Player : MonoBehaviour
             rb.velocity = new Vector2(xInput * moveSpeed, yInput * moveSpeed);
         else
             rb.velocity = Vector2.zero;
-
 
     }
 
@@ -140,8 +155,9 @@ public class Player : MonoBehaviour
 
     //}
 
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
-    //}
+    private void OnDrawGizmos()
+    {
+        //Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
 }
