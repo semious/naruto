@@ -13,18 +13,16 @@ public class PlayerAnimationEvents : MonoBehaviour
 
     private void StartAttack()
     {
-        player.setMovement(false);
-        player.setAttack(true);
+
     }
 
     private void FinishAttack()
     {
-        player.setMovement(true);
-        player.setAttack(false);
+
     }
 
     private void Damage() { 
-        player.DamanageEnemies();
+
     }
 
     
