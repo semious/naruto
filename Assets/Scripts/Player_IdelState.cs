@@ -22,6 +22,8 @@ public class Player_IdelState : EntityState
 
         if (player.moveInput.x != 0 || player.moveInput.y != 0)
         {
+            // 在切换到其他状态之前，先设置转向,否则会出现其他状态中动画第一帧突然转向的视觉问题
+            player.HandleFlip(player.moveInput.x);
             stateMachine.ChangeState(player.moveState);
         }
     }

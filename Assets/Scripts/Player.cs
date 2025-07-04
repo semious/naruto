@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public Animator anim;
+    public Rigidbody2D rb;
+
     private PlayerInputSet input;
     private StateMachine stateMachine;
 
@@ -10,8 +13,18 @@ public class Player : MonoBehaviour
 
     public Vector2 moveInput { get; private set; }
 
+
+    [Header("Movement Details")]
+    public float moveSpeed;
+
+
+    private bool facingRight = true;
+
     private void Awake()
     {
+        anim = GetComponentInChildren<Animator>();
+        rb = GetComponent<Rigidbody2D>();
+
         stateMachine = new StateMachine();
         input = new PlayerInputSet();
 
@@ -39,6 +52,32 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        //Debug.Log($"moveInput.x: {moveInput.x}");
         stateMachine.UpdateActiveState();
+    }
+
+    public void SetVelocity(float xVelocity, float yVelocity)
+    {
+        HandleFlip(xVelocity);
+        rb.velocity = new Vector2(xVelocity, yVelocity);
+    }
+
+    public void HandleFlip(float xVelocity)
+    {
+        if (xVelocity > 0 && !facingRight)
+        {
+            Flip();
+        }
+        else if (xVelocity < 0 && facingRight)
+        {
+            Flip();
+        }
+    }
+
+
+    private void Flip()
+    {
+        facingRight = !facingRight;
+        transform.Rotate(0, 180, 0);
     }
 }
