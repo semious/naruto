@@ -567,10 +567,10 @@ GameObject:
   m_Component:
   - component: {fileID: 583937230}
   - component: {fileID: 583937232}
-  - component: {fileID: 583937237}
   - component: {fileID: 583937235}
   - component: {fileID: 583937238}
   - component: {fileID: 583937239}
+  - component: {fileID: 583937240}
   m_Layer: 8
   m_Name: Animator
   m_TagString: Untagged
@@ -666,18 +666,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &583937237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 583937229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4778f4f62a6811a40891422279fc33b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!70 &583937238
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -774,6 +762,18 @@ PolygonCollider2D:
       - {x: 0.45499992, y: -1.2875004}
       - {x: 1.0799999, y: -1.2875004}
   m_UseDelaunayMesh: 0
+--- !u!114 &583937240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583937229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5895ff1e1013e243817093e5f62be53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1180,6 +1180,8 @@ MonoBehaviour:
   anim: {fileID: 0}
   rb: {fileID: 0}
   moveSpeed: 8
+  attackVelocity: {x: 8, y: 12}
+  attackVelocityDuration: 0.1
 --- !u!50 &1825271187
 Rigidbody2D:
   serializedVersion: 4

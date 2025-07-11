@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player_IdelState : EntityState
+public class Player_IdelState : Player_GroundedState
 {
     public Player_IdelState(Player player, StateMachine stateMachine, string stateName) : base(player, stateMachine, stateName)
     {

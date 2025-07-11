@@ -5,20 +5,25 @@ public class Player : MonoBehaviour
     public Animator anim;
     public Rigidbody2D rb;
 
-    private PlayerInputSet input;
+    public PlayerInputSet input { get; private set; }
     private StateMachine stateMachine;
 
     public Player_IdelState idleState { get; private set; }
     public Player_MoveState moveState { get; private set; }
-
-    public Vector2 moveInput { get; private set; }
+    public Player_BasicAttackState basicAttackState { get; private set; }
 
 
     [Header("Movement Details")]
     public float moveSpeed;
-
-
+    public Vector2 moveInput { get; private set; }
     private bool facingRight = true;
+    public int facingDir { get; private set; } = 1;
+
+
+    [Header("Attack Details")]
+    public Vector2 attackVelocity;
+    public float attackVelocityDuration = .1f;
+
 
     private void Awake()
     {
@@ -30,6 +35,7 @@ public class Player : MonoBehaviour
 
         idleState = new Player_IdelState(this, stateMachine, "idle");
         moveState = new Player_MoveState(this, stateMachine, "move");
+        basicAttackState = new Player_BasicAttackState(this, stateMachine, "basicAttack");
     }
 
     private void OnEnable()
@@ -56,6 +62,11 @@ public class Player : MonoBehaviour
         stateMachine.UpdateActiveState();
     }
 
+    public void CallAnimationTrigger()
+    {
+        stateMachine.currentState.CallAnimationTrigger();
+    }
+
     public void SetVelocity(float xVelocity, float yVelocity)
     {
         HandleFlip(xVelocity);
@@ -78,6 +89,7 @@ public class Player : MonoBehaviour
     private void Flip()
     {
         facingRight = !facingRight;
+        facingDir *= -1;
         transform.Rotate(0, 180, 0);
     }
 }
