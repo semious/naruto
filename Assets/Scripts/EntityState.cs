@@ -6,6 +6,7 @@ public abstract class EntityState
     protected StateMachine stateMachine;
     protected string animBoolName;
     protected PlayerInputSet input;
+    protected Animator anim;
 
     protected float stateTimer;
     protected bool triggerCalled;
@@ -16,6 +17,7 @@ public abstract class EntityState
         this.stateMachine = stateMachine;
         this.animBoolName = animBoolName;
         this.input = player.input;
+        this.anim = player.anim;
     }
 
     public virtual void Enter()

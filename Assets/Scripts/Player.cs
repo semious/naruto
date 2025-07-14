@@ -21,8 +21,9 @@ public class Player : MonoBehaviour
 
 
     [Header("Attack Details")]
-    public Vector2 attackVelocity;
+    public Vector2[] attackVelocity;
     public float attackVelocityDuration = .1f;
+    public float attackComboResetTime = 0.5f; // Cooldown for basic combo attack
 
 
     private void Awake()
