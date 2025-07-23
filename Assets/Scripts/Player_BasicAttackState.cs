@@ -10,6 +10,9 @@ public class Player_BasicAttackState : EntityState
     private float comboResetTime = 0.5f;
     private float lastTimeAttacked;
 
+    private int attackDir;
+    private bool comboAttackQueued;
+
     public Player_BasicAttackState(Player player, StateMachine stateMachine, string animBoolName) : base(player, stateMachine, animBoolName)
     {
     }
@@ -19,6 +22,8 @@ public class Player_BasicAttackState : EntityState
         base.Enter();
 
         ResetComboAttack();
+
+        attackDir = player.moveInput.x != 0 ? (int)player.moveInput.x : player.facingDir;
 
         anim.SetInteger("basicAttackIndex", comboIndex);
 
@@ -38,12 +43,13 @@ public class Player_BasicAttackState : EntityState
     {
         base.Update();
 
+        if (input.Player.Attack.WasPressedThisFrame())
+            QueueNextAttack();
+
         HandleAttackVelocity();
 
         if (triggerCalled)
-        {
-            stateMachine.ChangeState(player.idleState);
-        }
+            HandleStateExit();
     }
     private void ApplyAttackVelocity()
     {
@@ -62,9 +68,29 @@ public class Player_BasicAttackState : EntityState
         }
     }
 
+    private void HandleStateExit()
+    {
+        if (comboAttackQueued)
+        {
+            anim.SetBool(animBoolName, false);
+            player.EnterAttackStateWithDelay();
+        }
+        else
+            stateMachine.ChangeState(player.idleState);
+    }
+
+    private void QueueNextAttack()
+    {
+        if (comboIndex < comboMax)
+        {
+            comboAttackQueued = true;
+        }
+    }
+
     private void ResetComboAttack()
     {
-        if(Time.time - lastTimeAttacked > comboResetTime)
+        comboAttackQueued = false;
+        if (Time.time - lastTimeAttacked > comboResetTime)
         {
             comboIndex = 1;
         }
